@@ -740,7 +740,7 @@ const Header = () => {
           >
             {/* <img className="" src="/9x.png" /> */}
             {/* <img className="" style={{ width: "500px" }} src="/imgs/logo.png" /> */}
-           <span style={{color:"white",fontWeight:'bold',fontSize:"20px"}}>7horse</span> 
+           <span style={{color:"white",fontWeight:'bold',fontSize:"20px"}}>A2Z</span> 
           </CustomLink>
 
           <div className="">
@@ -1756,7 +1756,7 @@ const Header = () => {
                       activeMenu === "Report" ? "bg-active" : ""
                     } `}
                   >
-                    <a href="https://olddata.7horse.online"
+                    <a href="https://olddata.a2zlive.shop"
                     >
                       <LocalOfferIcon className="text-warning " />
                       <b className="md:text-lg text-xs font-medium text-white">

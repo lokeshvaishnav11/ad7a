@@ -849,7 +849,8 @@ p {
 }
 
 .logo-login {
-  width: 50%;
+  width: 90%;
+  border-radius:50%
 }
 
 .search {
