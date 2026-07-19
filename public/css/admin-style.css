@@ -8476,6 +8476,10 @@ button.btn-close::after {
   }
 }
 
+.logo-login {
+  width: 90%;
+  border-radius:50%
+}
 /* ===== CASINO GRID — 3 items per row, reference-matched ===== */
 
 /* ===== CASINO GRID (chub- prefix to avoid clashing with any existing global classes) ===== */
