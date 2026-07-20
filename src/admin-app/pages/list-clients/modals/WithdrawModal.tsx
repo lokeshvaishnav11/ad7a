@@ -164,7 +164,7 @@ const WithdrawModal = (props: any) => {
                     )}
                   </div>
                 </div>
-                <div className="row m-b-20">
+                {/* <div className="row m-b-20">
                   <div className="col-md-4">
                     <label>Remark</label>
                   </div>
@@ -178,7 +178,7 @@ const WithdrawModal = (props: any) => {
                       <span className="error">{errors.narration.message}</span>
                     )}
                   </div>
-                </div>
+                </div> */}
                 {/* <div className='row m-b-20'>
                   <div className='col-md-4'>
                     <label>Transaction Password</label>
