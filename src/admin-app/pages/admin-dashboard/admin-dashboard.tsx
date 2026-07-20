@@ -471,14 +471,14 @@ const AdminDashboard = () => {
                           >
                             <CustomLink
                               to={`/casino/${Item.slug}`}
-                              className="block"
+                              className="block backg-all"
                               style={{
                                 display: "flex",
                                 flexDirection: "column",
                                 alignItems: "center",
                                 textDecoration: "none",
                                 borderRadius: "10px",
-                                background:"rgb(18, 58, 124)"
+                                // background:"rgb(18, 58, 124)"
                               }}
                             >
                               <img
@@ -520,14 +520,14 @@ const AdminDashboard = () => {
                     >
                       <CustomLink
                         to="/matka-books"
-                        className="block"
+                        className="block backg-all"
                         style={{
                           display: "flex",
                           flexDirection: "column",
                           alignItems: "center",
                           textDecoration: "none",
                              borderRadius: "10px",
-                                background:"rgb(18, 58, 124)"
+                                // background:"rgb(18, 58, 124)"
                         }}
                       >
                         <img

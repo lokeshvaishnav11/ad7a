@@ -27,7 +27,7 @@
   --blue-color: #0000ff;
   --them1color: #ffc01a;
   --theme2color: #0d2c54;
-  --theme2-bg70: rgb(18, 58, 124);
+  --theme2-bg70:#020421;
 }
 
 html,
@@ -102,7 +102,7 @@ body {
 }
 
 .bg-gray-header{
-  background-color:  darkgoldenrod;
+  background-color:  #020421;
  }
 
 
@@ -1882,13 +1882,21 @@ ul.mtree.transit li.mtree-open>a::after {
 }
 
 .card-header-custom{
-      background:rgb(18, 58, 124);
+      background:#020421;
+
     color: #fff !important;
     font-weight: 700;
     margin-bottom: 0;
         padding-top: 8px;
     padding-bottom: 8px;
         border-radius: 10px;
+}
+
+
+.backg-all{
+  background:#020421 !important;
+
+    color: #fff !important;
 }
 
 .main-content {
@@ -8300,7 +8308,7 @@ button.btn-close::after {
   min-height: 260px;
   max-height: 480px;
 
-  background-image: url("https://bethub24pro.co/bet99expro/login-bg-bethub24.png");
+  background-image: url("https://t3.ftcdn.net/jpg/11/01/70/16/240_F_1101701656_OycelBJ33tgHzPLYcjZmk04PRP4GMY6d.jpg");
   background-size: cover;
   /* "top center" keeps the faces/subject in frame instead of
      getting cropped from the sides on narrow phone screens */
@@ -8310,7 +8318,7 @@ button.btn-close::after {
 
 /* Circular logo badge overlapping hero + card */
 .bh-badge {
-  position: absolute;
+  /* position: absolute;
   right: 20px;
   bottom: -55px;
   width: 110px;
@@ -8322,7 +8330,21 @@ button.btn-close::after {
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
-  z-index: 5;
+  z-index: 5; */
+
+  position: absolute;
+    right: 207px;
+    bottom: -33px;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    /* background: #ff00d1; */
+    /* border: 4px solid #ffff; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgb(0 0 0 / 40%);
+    z-index: 5;
 }
 
 .bh-badge-inner {
@@ -8339,13 +8361,20 @@ button.btn-close::after {
 
 /* ---------- CARD ---------- */
 .bh-card {
-  background: #0d2c54;
+  /* background: #0d2c54;
   border-radius: 28px 28px 0 0;
   margin-top: -28px;
   padding: 40px 24px 30px;
   position: relative;
   z-index: 2;
-  flex: 1;
+  flex: 1; */
+      background: #020421;
+    border-radius: 28px 28px 0 0;
+    margin-top: -28px;
+    padding: 40px 24px 30px;
+    position: relative;
+    z-index: 2;
+    flex: 1;
 }
 
 .bh-title {
@@ -8356,11 +8385,18 @@ button.btn-close::after {
   letter-spacing: 2px;
   margin-bottom: 28px;
   margin-right: 44px;
+      margin-top: 45px;
 }
 
 .bh-form {
-  max-width: 420px;
-  margin: 0 auto;
+  /* max-width: 420px;
+  margin: 0 auto; */
+      max-width: 420px;
+    margin: 0 auto;
+    background: white;
+    padding: 29px;
+    border-radius: 8px;
+    padding: 47px;
 }
 
 /* ---------- INPUTS ---------- */
@@ -8370,7 +8406,7 @@ button.btn-close::after {
 }
 
 .bh-input {
-  width: 100%;
+  /* width: 100%;
   height: 54px;
   border-radius: 30px;
   border: 2px solid #e5286a;
@@ -8378,7 +8414,16 @@ button.btn-close::after {
   padding: 0 22px;
   font-size: 15px;
   color: #333;
-  outline: none;
+  outline: none; */
+      width: 100%;
+    height: 54px;
+    border-radius: 12px;
+    border: 2px solid #e5286a;
+    background: #fff;
+    padding: 0 22px;
+    font-size: 15px;
+    color: #333;
+    outline: none;
 }
 
 .bh-input::placeholder {
@@ -8410,7 +8455,7 @@ button.btn-close::after {
 }
 
 .bh-btn-login {
-  height: 54px;
+  /* height: 54px;
   border-radius: 30px;
   border: none;
   background: linear-gradient(180deg, #ef2d78, #d81a63);
@@ -8419,7 +8464,17 @@ button.btn-close::after {
   font-size: 19px;
   letter-spacing: 0.5px;
   cursor: pointer;
-  box-shadow: 0 6px 16px rgba(216, 26, 99, 0.4);
+  box-shadow: 0 6px 16px rgba(216, 26, 99, 0.4); */
+      height: 51px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(180deg, #e1234e, #ff0000);
+    color: #fff;
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(216, 26, 99, 0.4);
 }
 
 .bh-btn-login:hover {

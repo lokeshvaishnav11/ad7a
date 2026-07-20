@@ -649,7 +649,7 @@ const Header = () => {
       <header className="">
         <div
           className="flex newmargin  justify-between md:justify-end p-2  bg-gray-header"
-          style={{ backgroundColor: "rgb(18, 58, 124)", color: "black" }}
+          style={{  color: "black" }}
         >
           <div
             className="side-menu-buttonn md:hidden ml-2 "
@@ -736,7 +736,7 @@ const Header = () => {
           <CustomLink
             to={"/"}
             className="logo-new navbarbg  -600"
-            style={{ background: "rgb(18, 58, 124)" }}
+            style={{ background: "#020421" }}
           >
             {/* <img className="" src="/9x.png" /> */}
             {/* <img className="" style={{ width: "500px" }} src="/imgs/logo.png" /> */}
