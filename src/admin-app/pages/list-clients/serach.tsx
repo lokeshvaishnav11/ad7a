@@ -220,7 +220,7 @@ const UserSearch: React.FC = () => {
       setUser(null);
 
       const res = await axios.get<UserResponse>(
-        `http://localhost:3021/api/user-p-serach?userId=${userId}`
+        `https://api.a2zlive.shop/api/user-p-serach?userId=${userId}`
       );
 
       if (res.data.status) {
