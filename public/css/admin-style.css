@@ -830,12 +830,14 @@ input+.slider span:last-child {
   .logo-new img {
     max-width: 100%;
     max-height: 46px;
+    margin-left: 19%;
   }
 }
 
 .logo-new img {
   max-width: 100%;
   max-height: 46px;
+  margin-left: 19%;
 
 }
 

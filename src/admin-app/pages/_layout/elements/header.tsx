@@ -677,7 +677,7 @@ const Header = () => {
               <li className="username  text-white my-2">
                 <span
                   className="bg-gray-500 relative  rounded-sm px-2 py-2"
-                  style={{ backgroundColor: "rgb(18, 58, 124)", color: "white" }}
+                  style={{ backgroundColor: "#0d2c54", color: "white" }}
                   onClick={() => setShowMenu(!showMenu)}
                 >
                   {userState?.user?.username} <i className="fa fa-caret-down" />
@@ -739,8 +739,8 @@ const Header = () => {
             style={{ background: "#020421" }}
           >
             {/* <img className="" src="/9x.png" /> */}
-            {/* <img className="" style={{ width: "500px" }} src="/imgs/logo.png" /> */}
-           <span style={{color:"white",fontWeight:'bold',fontSize:"20px"}}>A2Z</span> 
+            <img className=""  src="/imgs/logon.jpeg" />
+           {/* <span style={{color:"white",fontWeight:'bold',fontSize:"20px"}}>A2Z</span>  */}
           </CustomLink>
 
           <div className="">
@@ -845,7 +845,7 @@ const Header = () => {
 
                     {dropdownOpen ? (
                       <div
-                        style={{ background: "rgb(18, 58, 124)" }}
+                        style={{ background: "#0d2c54" }}
                         className="dropdown-menuj bg-neutral-700 md:pl-2   absolutek z-50 hiddenj group-hover:block w-full"
                       >
                         {getRoleOptions().map((role) => (
@@ -1274,7 +1274,7 @@ const Header = () => {
                       <div
                         className="dropdown-menuf bg-neutral-700 md:pl-2"
                         aria-labelledby="navbarDropdownMenuLink"
-                        style={{ background: "rgb(18, 58, 124)" }}
+                        style={{ background: "#0d2c54" }}
                       >
                         <li className="border-b-4 border-black pb-2">
                           <CustomLink
@@ -1497,7 +1497,7 @@ const Header = () => {
                         <div
                           className="dropdown-menud bg-none  md:pl-2"
                           aria-labelledby="navbarDropdownMenuLink"
-                          style={{ background: "rgb(18, 58, 124)" }}
+                          style={{ background: "#0d2c54" }}
                         >
                           {userState?.user?.role === RoleType.admin && (
                             <>

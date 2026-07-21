@@ -478,7 +478,7 @@ const AdminDashboard = () => {
                                 alignItems: "center",
                                 textDecoration: "none",
                                 borderRadius: "10px",
-                                // background:"rgb(18, 58, 124)"
+                                // background:"0d2c54"
                               }}
                             >
                               <img
@@ -527,7 +527,7 @@ const AdminDashboard = () => {
                           alignItems: "center",
                           textDecoration: "none",
                              borderRadius: "10px",
-                                // background:"rgb(18, 58, 124)"
+                                // background:"0d2c54"
                         }}
                       >
                         <img

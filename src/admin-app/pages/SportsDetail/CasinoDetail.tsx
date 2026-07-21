@@ -339,7 +339,7 @@ const CasinoDetail = () => {
                         >
                           <h5
                             className="mb-2 ng-binding"
-                            style={{ backgroundColor: "rgb(18, 58, 124)" }}
+                            style={{ backgroundColor: "#0d2c54" }}
                           >
                             {matchName}
                           </h5>
