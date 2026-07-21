@@ -47,6 +47,7 @@ const MatkaResult = React.lazy(() => import('./pages/matka/matka-result'))
 const MatkaResultRollback = React.lazy(() => import('./pages/matka/matka-rollback'))
 
 
+const UserSearch = React.lazy(()=>import("../admin-app/pages/list-clients/serach"))
 
 
 
@@ -155,6 +156,7 @@ const AdminRoutes = () => {
             
 
             { path: "session-bets/:id", element: <Completedbets/>},
+              { path: "serach", element: <UserSearch/>},
             { path: "match-bets/:id", element: <SessionBets />},
             { path: "match-bets-deleted/:id", element: <DeletedBetsMatch />},
 

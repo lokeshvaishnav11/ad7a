@@ -927,7 +927,7 @@ const AllClientLedger = () => {
   //////////////////////////////////////////////////////
   return (
     <div style={{ zoom: 0.8 }}>
-      <p className="text-center bg-secondary tx-12 text-white p-1">My Ledger</p>
+      <p className="text-center bg-secondary tx-12 text-white p-1">All Client ledger</p>
 
       <div className="ledger-container">
         <h2 className="ledger-title">All Client Ledger</h2>
