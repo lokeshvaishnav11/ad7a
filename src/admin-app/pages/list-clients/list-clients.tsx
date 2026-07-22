@@ -1087,6 +1087,7 @@ const ListClients = () => {
 
                       {/* <th>Engaged</th> */}
                      {userState?.user?.comm && <> <th className="text-center">Match %</th>
+                     <th className="text-center">Casino %</th>
                       <th className="text-center">Session %</th>
                       <th className="text-center">Matka %</th> </>}
 
@@ -1871,6 +1872,7 @@ const ListClients = () => {
 
                             {/* <td>{user.exposerLimit ? user.exposerLimit : 0}</td> */}
                             {userState.user.comm && <><td className="text-center">{user.mcom}%</td>
+                            <td className="text-center">{user?.cacom || 0}%</td>
                             <td className="text-center">{user.scom}%</td>
                             <td className="text-center">{user.matcom}%</td></>}
 

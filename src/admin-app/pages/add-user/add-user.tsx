@@ -1657,6 +1657,11 @@ const AddUser = () => {
       return;
     }
 
+     if (Number(data.cacom) > 2 || Number(data.cacom) < 0) {
+      toast.error("Session commission must be between 0 and 2");
+      return;
+    }
+
     if (Number(data.scom) > 4 || Number(data.scom) < 0) {
       toast.error("Session commission must be between 0 and 4");
       return;
@@ -2141,6 +2146,23 @@ const AddUser = () => {
                                 className="form-control"
                                 placeholder="M Comm Limit"
                                 {...register("mcom")}
+                                id="mcom"
+                                defaultValue={0}
+                                min="0"
+                                max="2"
+                                step="0.01"
+                                type="number"
+                              />
+                            </div>
+                          </div>
+
+                           <div className="col-md-6">
+                            <div className="form-group">
+                              <label htmlFor="cacom">Casino Commision(≤2%)</label>
+                              <input
+                                className="form-control"
+                                placeholder="Casino Comm Limit"
+                                {...register("cacom")}
                                 id="mcom"
                                 defaultValue={0}
                                 min="0"
