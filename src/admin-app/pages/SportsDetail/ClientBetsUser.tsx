@@ -503,7 +503,7 @@ const ClientBetsUser = () => {
                   setShowmatch(!showmatch);
                   setPlus(false);
                 }}
-                className="card-header p-0 text-center mb-2"
+                className="card-header  text-center mb-2"
               >
                 Display Match Bet
               </button>
