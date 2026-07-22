@@ -525,7 +525,7 @@ const ClientBetsLedger = () => {
                   setShowmatch(false);
                   setPlus(false);
                 }}
-                className="card-header p-0 text-center w-100 mb-2"
+                className="card-header  text-center w-100 mb-2"
               >
                 Display Session Bet
               </button>
@@ -540,7 +540,7 @@ const ClientBetsLedger = () => {
                   setShowmatch(false);
                   setPlus(!plus);
                 }}
-                className="card-header p-0 text-center w-100 mb-2"
+                className="card-header  text-center w-100 mb-2"
               >
                 Match & Session Plus Minus
               </button>

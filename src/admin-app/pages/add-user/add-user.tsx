@@ -1465,7 +1465,7 @@ const validationSchema = Yup.object().shape({
 
   password: Yup.string()
     .required("Password is required")
-    .min(8, "Password must be at least 8 characters"),
+    .min(6, "Password must be at least 6 characters"),
   role: Yup.string().required("Role is required"),
   creditRefrences: Yup.string(),
 
@@ -1658,7 +1658,7 @@ const AddUser = () => {
     }
 
      if (Number(data.cacom) > 2 || Number(data.cacom) < 0) {
-      toast.error("Session commission must be between 0 and 2");
+      toast.error("Casino must be between 0 and 2");
       return;
     }
 
@@ -1857,33 +1857,33 @@ const AddUser = () => {
 
   React.useEffect(() => {}, [uplineParent]);
 
-  const generatePassword = () => {
-    const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const lower = "abcdefghijklmnopqrstuvwxyz";
-    const numbers = "0123456789";
+ const generatePassword = () => {
+  const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const lower = "abcdefghijklmnopqrstuvwxyz";
+  const numbers = "0123456789";
 
-    const firstPart =
-      upper[Math.floor(Math.random() * upper.length)] +
-      lower[Math.floor(Math.random() * lower.length)] +
-      lower[Math.floor(Math.random() * lower.length)] +
-      lower[Math.floor(Math.random() * lower.length)];
+  const firstPart =
+    upper[Math.floor(Math.random() * upper.length)] +
+    lower[Math.floor(Math.random() * lower.length)] +
+    lower[Math.floor(Math.random() * lower.length)] +
+    lower[Math.floor(Math.random() * lower.length)];
 
-    let lastPart = "";
-    for (let i = 0; i < 4; i++) {
-      lastPart += numbers[Math.floor(Math.random() * numbers.length)];
-    }
+  let lastPart = "";
+  for (let i = 0; i < 2; i++) {
+    lastPart += numbers[Math.floor(Math.random() * numbers.length)];
+  }
 
-    const finalPassword = firstPart + lastPart;
+  const finalPassword = firstPart + lastPart;
 
-    setValue("password", finalPassword, {
-      shouldDirty: true,
-      shouldValidate: true,
-    });
-  };
+  setValue("password", finalPassword, {
+    shouldDirty: true,
+    shouldValidate: true,
+  });
+};
 
-  React.useEffect(() => {
-    generatePassword();
-  }, []);
+React.useEffect(() => {
+  generatePassword();
+}, []);
 
   return (
     <div className="container-fluid">
@@ -2163,7 +2163,7 @@ const AddUser = () => {
                                 className="form-control"
                                 placeholder="Casino Comm Limit"
                                 {...register("cacom")}
-                                id="mcom"
+                                id="cacom"
                                 defaultValue={0}
                                 min="0"
                                 max="2"
