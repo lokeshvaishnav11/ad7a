@@ -393,6 +393,23 @@ const AdminDashboard = () => {
                   </div>
                 </div>
 
+                                  
+                <div
+                  style={{
+                    width: "50%",
+                    padding: "0 10px",
+                    marginBottom: "10px",
+                    boxSizing: "border-box",
+                  }}
+                >
+                  <div className="">
+                    <div className=" card-header-custom h6 ng-binding">
+My Coins ({Number(newbalance || 0).toFixed(2)})
+
+                    </div>
+                  </div>
+                </div>
+
                {userState?.user?.comm && <div
                   style={{
                     width: "50%",
