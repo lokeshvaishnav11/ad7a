@@ -878,7 +878,7 @@ const EditUser = (data: any) => {
               </div>
 
               {/* Submit */}
-              <div className="row m-t-20">
+              <div className="row">
                 <div className="col-md-12">
                   <div className="float-right">
                     <SubmitButton  disabled={loading} className="btn btn-submit" type="submit">
