@@ -746,7 +746,13 @@ const EditUser = (data: any) => {
   const childData = selectedUserChild ? selectedUserChild : userState?.user;
 
   return (
-    <div className="container-fluid">
+    <div className="container-fluid" style={{
+    maxHeight: "80vh",
+    overflowY: "auto",
+    overflowX: "hidden",
+    WebkitOverflowScrolling: "touch",
+    paddingBottom: "20px",
+  }}>
       <div className="row">
         <div className="col-md-12 main-container">
           <div className="add-account">
