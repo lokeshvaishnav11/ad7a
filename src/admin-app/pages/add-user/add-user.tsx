@@ -241,7 +241,7 @@ const AddUser = () => {
     // For every other flow this stays whatever the form default was
     // (unregistered/undefined), so it won't accidentally grant permission.
     if (isAdminCreatingSubAdmin) {
-      data.comm = !!data.comm;
+      data.comm = true;
     }
 
     if (data.role !== RoleType.user) {
@@ -677,7 +677,7 @@ React.useEffect(() => {
 
                       {/* 🔗 NEW: Commission-approval checkbox — ONLY visible when
                           an Admin is creating a Sub-Admin. Value posts as req.body.comm */}
-                      {isAdminCreatingSubAdmin && (
+                      {/* {isAdminCreatingSubAdmin && (
                         <div className="col-md-6">
                           <div className="form-group">
                             <label
@@ -699,7 +699,7 @@ React.useEffect(() => {
                             </label>
                           </div>
                         </div>
-                      )}
+                      )} */}
 
                       {/* 🔗 NEW: Commission percentage fields — only shown when
                           showCommissionFields is true (Admin→SubAdmin case, OR
@@ -740,25 +740,7 @@ React.useEffect(() => {
                             </div>
                           </div>
 
-                          <div className="col-md-6">
-                            <div className="form-group">
-                              <label htmlFor="matcom">
-                                Matka Commision(≤10%)
-                              </label>
-                              <input
-                                className="form-control"
-                                placeholder="M Comm Limit"
-                                {...register("matcom")}
-                                id="matcom"
-                                defaultValue={0}
-                                min="0"
-                                max="10"
-                                step="0.01"
-                                type="number"
-                              />
-                            </div>
-                          </div>
-
+                         
                           <div className="col-md-6">
                             <div className="form-group">
                               <label htmlFor="scom">
@@ -777,6 +759,26 @@ React.useEffect(() => {
                               />
                             </div>
                           </div>
+
+                           <div className="col-md-6">
+                            <div className="form-group">
+                              <label htmlFor="matcom">
+                                Matka Commision(≤10%)
+                              </label>
+                              <input
+                                className="form-control"
+                                placeholder="M Comm Limit"
+                                {...register("matcom")}
+                                id="matcom"
+                                defaultValue={0}
+                                min="0"
+                                max="10"
+                                step="0.01"
+                                type="number"
+                              />
+                            </div>
+                          </div>
+
                         </>
                       )}
 
