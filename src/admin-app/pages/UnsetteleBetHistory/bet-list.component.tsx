@@ -296,24 +296,7 @@ const BetListComponent = ({
           
         )}
 
-        {isTrash && (
-          <td className='text-center wnwrap'>
-            {Item.status == 'pending' && userState?.user?.role === RoleType.admin && (
-              <>
-               
-                {/* 🔥 NEW ACTION2 BUTTON */}
-                <button
-                  style={{ marginLeft: 10 }}
-                  onClick={() => openEditModal(Item)}
-                >
-                  Action2
-                </button>
-              </>
-            )}
-          </td>
-
-          
-        )} 
+        
       </tr>
     )
   }
