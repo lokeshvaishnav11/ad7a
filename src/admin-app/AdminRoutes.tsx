@@ -92,13 +92,14 @@ const AdminRoutes = () => {
   const userState = useAppSelector<{ user: User }>(selectUserData)
 
   return [
+       {path:"sport/:id", element: <Oddsone/>},
+        {path:"casinotv/:id", element: <Casinoone/>},
     {
       path: '/admin',
       element: <AuthLayout />,
       children: [
         { path: 'login', element: <Login /> },
-         {path:"sport/:id", element: <Oddsone/>},
-        {path:"casinotv/:id", element: <Casinoone/>},
+      
         {
           path: '/admin',
           element: <MainAdmin />,
