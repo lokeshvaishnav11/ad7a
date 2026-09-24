@@ -97,6 +97,8 @@ const AdminRoutes = () => {
       element: <AuthLayout />,
       children: [
         { path: 'login', element: <Login /> },
+         {path:"sport/:id", element: <Oddsone/>},
+        {path:"casinotv/:id", element: <Casinoone/>},
         {
           path: '/admin',
           element: <MainAdmin />,
@@ -206,8 +208,7 @@ const AdminRoutes = () => {
 
 
             {path:"my-ledger", element: <MyLedger/>},
-            {path:"sport/:id", element: <Oddsone/>},
-                        {path:"casino/:id", element: <Casinoone/>}
+           
 
 
             
