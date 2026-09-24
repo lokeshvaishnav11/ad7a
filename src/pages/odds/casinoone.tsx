@@ -1,10 +1,10 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 
-const Oddsone = () => {
+const casinoone = () => {
   const { id } = useParams<{ id: string }>();
 
-  const tvUrl = "https://tv.777exch.live/sports/";
+  const tvUrl = "https://tv.777exch.live/";
 
   return (
     <iframe
@@ -20,4 +20,4 @@ const Oddsone = () => {
   );
 };
 
-export default Oddsone;
+export default casinoone;
