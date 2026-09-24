@@ -40,7 +40,7 @@ const UserSearch: React.FC = () => {
       setUser(null);
 
       const res = await axios.get<UserResponse>(
-        `http://localhost:3010/api/user-p-serach?userId=${encodeURIComponent(
+        `https://api.a2zlive.shop/api/user-p-serach?userId=${encodeURIComponent(
           userId.trim()
         )}`
       );
