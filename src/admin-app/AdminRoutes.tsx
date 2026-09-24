@@ -49,7 +49,7 @@ const MatkaResultRollback = React.lazy(() => import('./pages/matka/matka-rollbac
 
 const UserSearch = React.lazy(()=>import("../admin-app/pages/list-clients/serach"))
 const Oddsone = React.lazy(()=>import("../../src/pages/odds/oddsone"))
-const Casinone = React.lazy(()=>import("../../src/pages/odds/casinoone"))
+const Casinoone = React.lazy(()=>import("../../src/pages/odds/casinoone"))
 
 
 
@@ -207,7 +207,7 @@ const AdminRoutes = () => {
 
             {path:"my-ledger", element: <MyLedger/>},
             {path:"sport/:id", element: <Oddsone/>},
-                        {path:"casino/:id", element: <Casinone/>}
+                        {path:"casino/:id", element: <Casinoone/>}
 
 
             

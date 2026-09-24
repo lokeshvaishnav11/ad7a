@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 
-const casinoone = () => {
+const Casinoone = () => {
   const { id } = useParams<{ id: string }>();
 
   const tvUrl = "https://tv.777exch.live/";
@@ -20,4 +20,4 @@ const casinoone = () => {
   );
 };
 
-export default casinoone;
+export default Casinoone;
