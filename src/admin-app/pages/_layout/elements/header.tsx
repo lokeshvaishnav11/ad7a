@@ -379,6 +379,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import GroupIcon from "@mui/icons-material/Group";
 import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { useWebsocketUser } from "../../../../context/webSocketUser";
 
 const Header = () => {
   const userState = useAppSelector<{ user: User }>(selectUserData);
@@ -400,6 +401,8 @@ const Header = () => {
 
   const [gameList, setGameList] = React.useState([]);
   const location = useLocation();
+    const { socketUser } = useWebsocketUser();
+
 
   // React.useEffect(() => {
   //   axios
@@ -441,14 +444,22 @@ const Header = () => {
     useDrawer();
   //console.log(isOpen, isOpen2,"toggle drawrree")
 
-  const logoutUser = (e: any) => {
-    e.preventDefault();
-    dispatch(userUpdate({} as User));
-    setTimeout(() => {
-      dispatch(logout());
-      navigate.go("/login");
-    }, 1);
-  };
+const logoutUser = (e: any) => {
+  e.preventDefault();
+
+  // Redis se online key delete karwane ke liye
+  if (userState?.user?._id) {
+    socketUser.emit("logout", userState.user._id);
+  }
+
+  // Existing logout logic
+  dispatch(userUpdate({} as User));
+
+  setTimeout(() => {
+    dispatch(logout());
+    navigate.go("/login");
+  }, 1);
+};
 
   const onSuggestionsFetchRequested = ({ value }: any) => {
     return userService.getUserListSuggestion({ username: value });

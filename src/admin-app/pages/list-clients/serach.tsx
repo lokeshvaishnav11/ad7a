@@ -677,7 +677,7 @@ const UserSearch: React.FC = () => {
 
                     {/* LAST ACTION */}
 
-                    <th
+                    {/* <th
                       style={{
                         padding: "14px 18px",
                         textAlign: "center",
@@ -687,7 +687,7 @@ const UserSearch: React.FC = () => {
                       }}
                     >
                       ACTION
-                    </th>
+                    </th> */}
                   </tr>
                 </thead>
 
@@ -819,7 +819,7 @@ const UserSearch: React.FC = () => {
 
                         {/* LOGOUT BUTTON */}
 
-                        <td
+                        {/* <td
                           style={{
                             padding:
                               "15px 18px",
@@ -834,7 +834,7 @@ const UserSearch: React.FC = () => {
                           <LogoutButton
                             item={item}
                           />
-                        </td>
+                        </td> */}
                       </tr>
                     )
                   )}
@@ -951,7 +951,7 @@ const UserSearch: React.FC = () => {
 
                     {/* LOGOUT */}
 
-                    <td
+                    {/* <td
                       style={{
                         padding: "16px 18px",
 
@@ -964,7 +964,7 @@ const UserSearch: React.FC = () => {
                       <LogoutButton
                         item={user.user}
                       />
-                    </td>
+                    </td> */}
                   </tr>
                 </tbody>
               </table>
