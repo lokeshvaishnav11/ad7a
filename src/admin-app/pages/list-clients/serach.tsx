@@ -1,20 +1,17 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-interface Parent {
+interface UserItem {
   _id: string;
   username: string;
   code: string;
-  isLogin: boolean;
+  isLogin: boolean;   // DB lock/unlock
+  isOnline: boolean;  // Redis online/offline
 }
 
 interface UserData {
-  user: {
-    username: string;
-    code: string;
-    isLogin: boolean;
-  };
-  parents: Parent[];
+  user: UserItem;
+  parents: UserItem[];
 }
 
 interface UserResponse {
@@ -22,13 +19,21 @@ interface UserResponse {
   data: UserData;
 }
 
+const API_URL = "http://localhost:3010/api";
+
 const UserSearch: React.FC = () => {
   const [userId, setUserId] = useState("");
   const [loading, setLoading] = useState(false);
+  const [logoutLoading, setLogoutLoading] = useState<string | null>(null);
   const [user, setUser] = useState<UserData | null>(null);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  const handleSearch = async () => {
+  // ============================================
+  // SEARCH
+  // ============================================
+
+  const handleSearch = async (clearData = true) => {
     if (!userId.trim()) {
       setError("Please enter User ID");
       return;
@@ -37,10 +42,14 @@ const UserSearch: React.FC = () => {
     try {
       setLoading(true);
       setError("");
-      setUser(null);
+      setSuccess("");
+
+      if (clearData) {
+        setUser(null);
+      }
 
       const res = await axios.get<UserResponse>(
-        `https://api.a2zlive.shop/api/user-p-serach?userId=${encodeURIComponent(
+        `${API_URL}/user-p-serach?userId=${encodeURIComponent(
           userId.trim()
         )}`
       );
@@ -51,21 +60,107 @@ const UserSearch: React.FC = () => {
         setError("User not found");
       }
     } catch (err: any) {
-      setError(err?.response?.data?.message || "User not found");
+      setError(
+        err?.response?.data?.msg ||
+          err?.response?.data?.message ||
+          "User not found"
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
     if (e.key === "Enter") {
       handleSearch();
     }
   };
 
-  const StatusBadge = ({ isLogin }: { isLogin: boolean }) => {
-    const online = isLogin === true;
+  // ============================================
+  // FORCE LOGOUT
+  // ============================================
 
+  const handleLogout = async (item: UserItem) => {
+    if (!item._id) return;
+
+    const confirmLogout = window.confirm(
+      `Are you sure you want to logout ${item.username}?`
+    );
+
+    if (!confirmLogout) return;
+
+    try {
+      setLogoutLoading(item._id);
+      setError("");
+      setSuccess("");
+
+      const res = await axios.post(
+        `${API_URL}/force-user-logout`,
+        {
+          userId: item._id,
+        }
+      );
+
+      if (res.data?.status || res.data?.success) {
+        setSuccess(`${item.username} logged out successfully`);
+
+        // UI me turant offline dikhao
+        setUser((prev) => {
+          if (!prev) return prev;
+
+          return {
+            user:
+              prev.user._id === item._id
+                ? {
+                    ...prev.user,
+                    isOnline: false,
+                  }
+                : prev.user,
+
+            parents: prev.parents.map((parent) =>
+              parent._id === item._id
+                ? {
+                    ...parent,
+                    isOnline: false,
+                  }
+                : parent
+            ),
+          };
+        });
+
+        // Redis se fresh status bhi le lo
+        setTimeout(() => {
+          handleSearch(false);
+        }, 400);
+      } else {
+        setError(
+          res.data?.msg ||
+            res.data?.message ||
+            "Logout failed"
+        );
+      }
+    } catch (err: any) {
+      setError(
+        err?.response?.data?.msg ||
+          err?.response?.data?.message ||
+          "Logout failed"
+      );
+    } finally {
+      setLogoutLoading(null);
+    }
+  };
+
+  // ============================================
+  // LOGIN / LOGOUT BADGE
+  // ============================================
+
+  const OnlineBadge = ({
+    isOnline,
+  }: {
+    isOnline: boolean;
+  }) => {
     return (
       <span
         style={{
@@ -73,14 +168,19 @@ const UserSearch: React.FC = () => {
           alignItems: "center",
           justifyContent: "center",
           gap: 7,
-          minWidth: 90,
+          minWidth: 92,
           padding: "7px 12px",
           borderRadius: 50,
           fontSize: 12,
-          fontWeight: 700,
-          color: online ? "#067647" : "#b42318",
-          background: online ? "#ecfdf3" : "#fef3f2",
-          border: online
+          fontWeight: 800,
+
+          color: isOnline ? "#067647" : "#b42318",
+
+          background: isOnline
+            ? "#ecfdf3"
+            : "#fef3f2",
+
+          border: isOnline
             ? "1px solid #abefc6"
             : "1px solid #fecdca",
         }}
@@ -90,15 +190,115 @@ const UserSearch: React.FC = () => {
             width: 8,
             height: 8,
             borderRadius: "50%",
-            background: online ? "#12b76a" : "#f04438",
-            boxShadow: online
+
+            background: isOnline
+              ? "#12b76a"
+              : "#f04438",
+
+            boxShadow: isOnline
               ? "0 0 0 3px rgba(18,183,106,.12)"
               : "0 0 0 3px rgba(240,68,56,.10)",
           }}
         />
 
-        {online ? "Online" : "Offline"}
+        {isOnline ? "Login" : "Logout"}
       </span>
+    );
+  };
+
+  // ============================================
+  // LOCK / UNLOCK BADGE
+  // ============================================
+
+  const LockBadge = ({
+    isLogin,
+  }: {
+    isLogin: boolean;
+  }) => {
+    return (
+      <span
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          minWidth: 92,
+          padding: "7px 12px",
+          borderRadius: 50,
+          fontSize: 12,
+          fontWeight: 800,
+
+          color: isLogin
+            ? "#175cd3"
+            : "#b42318",
+
+          background: isLogin
+            ? "#eff8ff"
+            : "#fef3f2",
+
+          border: isLogin
+            ? "1px solid #b2ddff"
+            : "1px solid #fecdca",
+        }}
+      >
+        {isLogin ? "🔓 Unlock" : "🔒 Lock"}
+      </span>
+    );
+  };
+
+  // ============================================
+  // LOGOUT BUTTON
+  // ============================================
+
+  const LogoutButton = ({
+    item,
+  }: {
+    item: UserItem;
+  }) => {
+    const processing =
+      logoutLoading === item._id;
+
+    const disabled =
+      !item.isOnline || processing;
+
+    return (
+      <button
+        type="button"
+        disabled={disabled}
+        onClick={() => handleLogout(item)}
+        style={{
+          minWidth: 90,
+          height: 34,
+          border: 0,
+          borderRadius: 7,
+
+          background: disabled
+            ? "#e4e7ec"
+            : "#d92d20",
+
+          color: disabled
+            ? "#98a2b3"
+            : "#ffffff",
+
+          cursor: disabled
+            ? "not-allowed"
+            : "pointer",
+
+          fontSize: 12,
+          fontWeight: 800,
+
+          padding: "0 13px",
+
+          boxShadow: disabled
+            ? "none"
+            : "0 2px 5px rgba(217,45,32,.20)",
+        }}
+      >
+        {processing
+          ? "Logging..."
+          : item.isOnline
+          ? "Logout"
+          : "Offline"}
+      </button>
     );
   };
 
@@ -106,9 +306,12 @@ const UserSearch: React.FC = () => {
     <div
       style={{
         minHeight: "100vh",
+
         background:
           "linear-gradient(135deg, #f8fafc 0%, #eef2f7 50%, #e8edf5 100%)",
+
         padding: "35px 20px",
+
         fontFamily:
           "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
       }}
@@ -116,11 +319,13 @@ const UserSearch: React.FC = () => {
       <div
         style={{
           width: "100%",
-          maxWidth: 950,
+          maxWidth: 1100,
           margin: "0 auto",
         }}
       >
-        {/* ================= HEADER ================= */}
+        {/* ======================================
+            HEADER
+        ====================================== */}
 
         <div
           style={{
@@ -146,18 +351,24 @@ const UserSearch: React.FC = () => {
               fontSize: 14,
             }}
           >
-            Search user and view complete hierarchy & login status
+            Search user and view complete hierarchy,
+            login status and account status
           </p>
         </div>
 
-        {/* ================= SEARCH CARD ================= */}
+        {/* ======================================
+            SEARCH CARD
+        ====================================== */}
 
         <div
           style={{
             background: "#ffffff",
             borderRadius: 16,
             border: "1px solid #e4e7ec",
-            boxShadow: "0 4px 14px rgba(16,24,40,.05)",
+
+            boxShadow:
+              "0 4px 14px rgba(16,24,40,.05)",
+
             overflow: "hidden",
           }}
         >
@@ -165,6 +376,7 @@ const UserSearch: React.FC = () => {
             style={{
               background:
                 "linear-gradient(135deg, #020421 0%, #07134d 100%)",
+
               padding: "18px 22px",
               color: "#fff",
             }}
@@ -209,6 +421,10 @@ const UserSearch: React.FC = () => {
                   if (error) {
                     setError("");
                   }
+
+                  if (success) {
+                    setSuccess("");
+                  }
                 }}
                 onKeyDown={handleKeyDown}
                 placeholder="Enter User ID"
@@ -216,9 +432,11 @@ const UserSearch: React.FC = () => {
                   flex: "1 1 400px",
                   height: 50,
                   borderRadius: 10,
+
                   border: error
                     ? "1px solid #f04438"
                     : "1px solid #d0d5dd",
+
                   padding: "0 15px",
                   fontSize: 15,
                   color: "#101828",
@@ -229,25 +447,39 @@ const UserSearch: React.FC = () => {
               />
 
               <button
-                onClick={handleSearch}
+                onClick={() => handleSearch()}
                 disabled={loading}
                 style={{
                   minWidth: 145,
                   height: 50,
                   border: 0,
                   borderRadius: 10,
-                  background: loading ? "#667085" : "#020421",
+
+                  background: loading
+                    ? "#667085"
+                    : "#020421",
+
                   color: "#fff",
-                  cursor: loading ? "not-allowed" : "pointer",
+
+                  cursor: loading
+                    ? "not-allowed"
+                    : "pointer",
+
                   fontSize: 14,
                   fontWeight: 700,
                   padding: "0 22px",
-                  boxShadow: "0 3px 8px rgba(2,4,33,.18)",
+
+                  boxShadow:
+                    "0 3px 8px rgba(2,4,33,.18)",
                 }}
               >
-                {loading ? "Searching..." : "Search User"}
+                {loading
+                  ? "Searching..."
+                  : "Search User"}
               </button>
             </div>
+
+            {/* ERROR */}
 
             {error && (
               <div
@@ -265,10 +497,31 @@ const UserSearch: React.FC = () => {
                 {error}
               </div>
             )}
+
+            {/* SUCCESS */}
+
+            {success && (
+              <div
+                style={{
+                  marginTop: 12,
+                  padding: "10px 13px",
+                  borderRadius: 8,
+                  background: "#ecfdf3",
+                  color: "#067647",
+                  border: "1px solid #abefc6",
+                  fontSize: 13,
+                  fontWeight: 600,
+                }}
+              >
+                {success}
+              </div>
+            )}
           </div>
         </div>
 
-        {/* ================= RESULT ================= */}
+        {/* ======================================
+            RESULT
+        ====================================== */}
 
         {user && (
           <div
@@ -277,7 +530,10 @@ const UserSearch: React.FC = () => {
               background: "#fff",
               borderRadius: 16,
               border: "1px solid #e4e7ec",
-              boxShadow: "0 4px 14px rgba(16,24,40,.05)",
+
+              boxShadow:
+                "0 4px 14px rgba(16,24,40,.05)",
+
               overflow: "hidden",
             }}
           >
@@ -286,10 +542,15 @@ const UserSearch: React.FC = () => {
             <div
               style={{
                 padding: "17px 20px",
-                borderBottom: "1px solid #eaecf0",
+                borderBottom:
+                  "1px solid #eaecf0",
+
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "space-between",
+
+                justifyContent:
+                  "space-between",
+
                 gap: 10,
                 flexWrap: "wrap",
               }}
@@ -313,14 +574,23 @@ const UserSearch: React.FC = () => {
                   }}
                 >
                   {user.parents.length} parent
-                  {user.parents.length !== 1 ? "s" : ""} found
+                  {user.parents.length !== 1
+                    ? "s"
+                    : ""}{" "}
+                  found
                 </div>
               </div>
 
-              <StatusBadge isLogin={user.user.isLogin} />
+              <OnlineBadge
+                isOnline={
+                  user.user.isOnline
+                }
+              />
             </div>
 
-            {/* TABLE */}
+            {/* ======================================
+                TABLE
+            ====================================== */}
 
             <div
               style={{
@@ -330,7 +600,7 @@ const UserSearch: React.FC = () => {
               <table
                 style={{
                   width: "100%",
-                  minWidth: 650,
+                  minWidth: 900,
                   borderCollapse: "collapse",
                 }}
               >
@@ -375,6 +645,8 @@ const UserSearch: React.FC = () => {
                       CODE
                     </th>
 
+                    {/* FIRST LOGIN / LOGOUT */}
+
                     <th
                       style={{
                         padding: "14px 18px",
@@ -384,76 +656,190 @@ const UserSearch: React.FC = () => {
                         width: 140,
                       }}
                     >
-                      STATUS
+                      LOGIN / LOGOUT
+                    </th>
+
+                    {/* SECOND LOCK / UNLOCK */}
+
+                    <th
+                      style={{
+                        padding: "14px 18px",
+                        textAlign: "center",
+                        fontSize: 12,
+                        fontWeight: 700,
+                        width: 140,
+                      }}
+                    >
+                      LOCK / UNLOCK
+                    </th>
+
+                    {/* LAST ACTION */}
+
+                    <th
+                      style={{
+                        padding: "14px 18px",
+                        textAlign: "center",
+                        fontSize: 12,
+                        fontWeight: 700,
+                        width: 130,
+                      }}
+                    >
+                      ACTION
                     </th>
                   </tr>
                 </thead>
 
                 <tbody>
-                  {user.parents.map((item, index) => (
-                    <tr
-                      key={item._id}
-                      style={{
-                        background: index % 2 === 0 ? "#fff" : "#f9fafb",
-                      }}
-                    >
-                      <td
+                  {/* =================================
+                      PARENTS
+                  ================================= */}
+
+                  {user.parents.map(
+                    (item, index) => (
+                      <tr
+                        key={item._id}
                         style={{
-                          padding: "15px 18px",
-                          borderBottom: "1px solid #eaecf0",
+                          background:
+                            index % 2 === 0
+                              ? "#fff"
+                              : "#f9fafb",
                         }}
                       >
-                        <span
+                        <td
                           style={{
-                            background: "#f2f4f7",
-                            color: "#344054",
-                            padding: "5px 9px",
-                            borderRadius: 6,
-                            fontSize: 11,
-                            fontWeight: 700,
-                            whiteSpace: "nowrap",
+                            padding:
+                              "15px 18px",
+
+                            borderBottom:
+                              "1px solid #eaecf0",
                           }}
                         >
-                          P{index + 1}
-                        </span>
-                      </td>
+                          <span
+                            style={{
+                              background:
+                                "#f2f4f7",
 
-                      <td
-                        style={{
-                          padding: "15px 18px",
-                          borderBottom: "1px solid #eaecf0",
-                          color: "#101828",
-                          fontSize: 14,
-                          fontWeight: 700,
-                        }}
-                      >
-                        {item.username || "-"}
-                      </td>
+                              color:
+                                "#344054",
 
-                      <td
-                        style={{
-                          padding: "15px 18px",
-                          borderBottom: "1px solid #eaecf0",
-                          color: "#475467",
-                          fontSize: 14,
-                        }}
-                      >
-                        {item.code || "-"}
-                      </td>
+                              padding:
+                                "5px 9px",
 
-                      <td
-                        style={{
-                          padding: "15px 18px",
-                          borderBottom: "1px solid #eaecf0",
-                          textAlign: "center",
-                        }}
-                      >
-                        <StatusBadge isLogin={item.isLogin} />
-                      </td>
-                    </tr>
-                  ))}
+                              borderRadius: 6,
+                              fontSize: 11,
+                              fontWeight: 700,
 
-                  {/* ================= CURRENT USER ================= */}
+                              whiteSpace:
+                                "nowrap",
+                            }}
+                          >
+                            P{index + 1}
+                          </span>
+                        </td>
+
+                        <td
+                          style={{
+                            padding:
+                              "15px 18px",
+
+                            borderBottom:
+                              "1px solid #eaecf0",
+
+                            color:
+                              "#101828",
+
+                            fontSize: 14,
+                            fontWeight: 700,
+                          }}
+                        >
+                          {item.username ||
+                            "-"}
+                        </td>
+
+                        <td
+                          style={{
+                            padding:
+                              "15px 18px",
+
+                            borderBottom:
+                              "1px solid #eaecf0",
+
+                            color:
+                              "#475467",
+
+                            fontSize: 14,
+                          }}
+                        >
+                          {item.code || "-"}
+                        </td>
+
+                        {/* ONLINE */}
+
+                        <td
+                          style={{
+                            padding:
+                              "15px 18px",
+
+                            borderBottom:
+                              "1px solid #eaecf0",
+
+                            textAlign:
+                              "center",
+                          }}
+                        >
+                          <OnlineBadge
+                            isOnline={
+                              item.isOnline
+                            }
+                          />
+                        </td>
+
+                        {/* LOCK */}
+
+                        <td
+                          style={{
+                            padding:
+                              "15px 18px",
+
+                            borderBottom:
+                              "1px solid #eaecf0",
+
+                            textAlign:
+                              "center",
+                          }}
+                        >
+                          <LockBadge
+                            isLogin={
+                              item.isLogin
+                            }
+                          />
+                        </td>
+
+                        {/* LOGOUT BUTTON */}
+
+                        <td
+                          style={{
+                            padding:
+                              "15px 18px",
+
+                            borderBottom:
+                              "1px solid #eaecf0",
+
+                            textAlign:
+                              "center",
+                          }}
+                        >
+                          <LogoutButton
+                            item={item}
+                          />
+                        </td>
+                      </tr>
+                    )
+                  )}
+
+                  {/* =================================
+                      CURRENT USER
+                  ================================= */}
 
                   <tr
                     style={{
@@ -463,15 +849,24 @@ const UserSearch: React.FC = () => {
                     <td
                       style={{
                         padding: "16px 18px",
-                        borderTop: "2px solid #bbf7d0",
+
+                        borderTop:
+                          "2px solid #bbf7d0",
                       }}
                     >
                       <span
                         style={{
-                          display: "inline-block",
-                          background: "#16a34a",
+                          display:
+                            "inline-block",
+
+                          background:
+                            "#16a34a",
+
                           color: "#fff",
-                          padding: "5px 10px",
+
+                          padding:
+                            "5px 10px",
+
                           borderRadius: 6,
                           fontSize: 11,
                           fontWeight: 800,
@@ -484,20 +879,29 @@ const UserSearch: React.FC = () => {
                     <td
                       style={{
                         padding: "16px 18px",
-                        borderTop: "2px solid #bbf7d0",
+
+                        borderTop:
+                          "2px solid #bbf7d0",
+
                         color: "#101828",
+
                         fontSize: 14,
                         fontWeight: 800,
                       }}
                     >
-                      {user.user.username || "-"}
+                      {user.user.username ||
+                        "-"}
                     </td>
 
                     <td
                       style={{
                         padding: "16px 18px",
-                        borderTop: "2px solid #bbf7d0",
+
+                        borderTop:
+                          "2px solid #bbf7d0",
+
                         color: "#344054",
+
                         fontSize: 14,
                         fontWeight: 700,
                       }}
@@ -505,14 +909,59 @@ const UserSearch: React.FC = () => {
                       {user.user.code || "-"}
                     </td>
 
+                    {/* LOGIN / LOGOUT */}
+
                     <td
                       style={{
                         padding: "16px 18px",
-                        borderTop: "2px solid #bbf7d0",
+
+                        borderTop:
+                          "2px solid #bbf7d0",
+
                         textAlign: "center",
                       }}
                     >
-                      <StatusBadge isLogin={user.user.isLogin} />
+                      <OnlineBadge
+                        isOnline={
+                          user.user.isOnline
+                        }
+                      />
+                    </td>
+
+                    {/* LOCK / UNLOCK */}
+
+                    <td
+                      style={{
+                        padding: "16px 18px",
+
+                        borderTop:
+                          "2px solid #bbf7d0",
+
+                        textAlign: "center",
+                      }}
+                    >
+                      <LockBadge
+                        isLogin={
+                          user.user.isLogin
+                        }
+                      />
+                    </td>
+
+                    {/* LOGOUT */}
+
+                    <td
+                      style={{
+                        padding: "16px 18px",
+
+                        borderTop:
+                          "2px solid #bbf7d0",
+
+                        textAlign: "center",
+                      }}
+                    >
+                      <LogoutButton
+                        item={user.user}
+                      />
                     </td>
                   </tr>
                 </tbody>

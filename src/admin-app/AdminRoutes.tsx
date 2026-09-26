@@ -88,6 +88,7 @@ const CasinoList = React.lazy(() => import('./pages/casino-list/casino-list'))
 const GameReportAdmin = React.lazy(() => import('./pages/GameReports/GameReportAdmin'))
 
 
+
 const AdminRoutes = () => {
   const userState = useAppSelector<{ user: User }>(selectUserData)
 
