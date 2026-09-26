@@ -19,7 +19,9 @@ interface UserResponse {
   data: UserData;
 }
 
-const API_URL = "http://localhost:3010/api";
+// const API_URL = "http://localhost:3010/api";
+const API_URL = "https://api.a2zlive.shop/api";
+
 
 const UserSearch: React.FC = () => {
   const [userId, setUserId] = useState("");
