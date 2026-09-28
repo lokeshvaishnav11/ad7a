@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import accountService from "../../../services/account.service";
 
 interface UserItem {
   _id: string;
@@ -19,8 +20,8 @@ interface UserResponse {
   data: UserData;
 }
 
-// const API_URL = "http://localhost:3010/api";
-const API_URL = "https://api.a2zlive.shop/api";
+const API_URL = "http://localhost:3010/api";
+// const API_URL = "https://api.a2zlive.shop/api";
 
 
 const UserSearch: React.FC = () => {
@@ -85,6 +86,7 @@ const UserSearch: React.FC = () => {
   // ============================================
 
   const handleLogout = async (item: UserItem) => {
+    console.log(item,"item")
     if (!item._id) return;
 
     const confirmLogout = window.confirm(
@@ -98,12 +100,10 @@ const UserSearch: React.FC = () => {
       setError("");
       setSuccess("");
 
-      const res = await axios.post(
-        `${API_URL}/force-user-logout`,
-        {
-          userId: item._id,
-        }
-      );
+    
+    const res :any= await accountService.forceUserLogout({
+      userId: item._id,
+    });
 
       if (res.data?.status || res.data?.success) {
         setSuccess(`${item.username} logged out successfully`);
@@ -251,58 +251,50 @@ const UserSearch: React.FC = () => {
   // LOGOUT BUTTON
   // ============================================
 
-  const LogoutButton = ({
-    item,
-  }: {
-    item: UserItem;
-  }) => {
-    const processing =
-      logoutLoading === item._id;
+ const LogoutButton = ({
+  item,
+}: {
+  item: UserItem;
+}) => {
+  console.log(item,"item new")
+  const processing = logoutLoading === item._id;
 
-    const disabled =
-      !item.isOnline || processing;
+  return (
+    <button
+      type="button"
+      disabled={processing}
+      onClick={() => handleLogout(item)}
+      style={{
+        minWidth: 90,
+        height: 34,
+        border: 0,
+        borderRadius: 7,
 
-    return (
-      <button
-        type="button"
-        disabled={disabled}
-        onClick={() => handleLogout(item)}
-        style={{
-          minWidth: 90,
-          height: 34,
-          border: 0,
-          borderRadius: 7,
+        background: processing
+          ? "#e4e7ec"
+          : "#d92d20",
 
-          background: disabled
-            ? "#e4e7ec"
-            : "#d92d20",
+        color: processing
+          ? "#98a2b3"
+          : "#ffffff",
 
-          color: disabled
-            ? "#98a2b3"
-            : "#ffffff",
+        cursor: processing
+          ? "not-allowed"
+          : "pointer",
 
-          cursor: disabled
-            ? "not-allowed"
-            : "pointer",
+        fontSize: 12,
+        fontWeight: 800,
+        padding: "0 13px",
 
-          fontSize: 12,
-          fontWeight: 800,
-
-          padding: "0 13px",
-
-          boxShadow: disabled
-            ? "none"
-            : "0 2px 5px rgba(217,45,32,.20)",
-        }}
-      >
-        {processing
-          ? "Logging..."
-          : item.isOnline
-          ? "Logout"
-          : "Offline"}
-      </button>
-    );
-  };
+        boxShadow: processing
+          ? "none"
+          : "0 2px 5px rgba(217,45,32,.20)",
+      }}
+    >
+      {processing ? "Logging..." : "Logout"}
+    </button>
+  );
+};   
 
   return (
     <div
@@ -819,7 +811,7 @@ const UserSearch: React.FC = () => {
 
                         {/* LOGOUT BUTTON */}
 
-                        {/* <td
+                        <td
                           style={{
                             padding:
                               "15px 18px",
@@ -834,7 +826,7 @@ const UserSearch: React.FC = () => {
                           <LogoutButton
                             item={item}
                           />
-                        </td> */}
+                        </td>
                       </tr>
                     )
                   )}
@@ -951,7 +943,7 @@ const UserSearch: React.FC = () => {
 
                     {/* LOGOUT */}
 
-                    {/* <td
+                    <td
                       style={{
                         padding: "16px 18px",
 
@@ -964,7 +956,7 @@ const UserSearch: React.FC = () => {
                       <LogoutButton
                         item={user.user}
                       />
-                    </td> */}
+                    </td> 
                   </tr>
                 </tbody>
               </table>

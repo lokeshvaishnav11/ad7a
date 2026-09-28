@@ -23,6 +23,13 @@ class AccountService {
     return api.get(`matka-list`);
   }
 
+  forceUserLogout(data: { userId: string }) {
+  api.post(
+    `force-user-logout`,
+    data
+  );
+}
+
   matkagamelistRollBack() {
     return api.get(`matka-list-rollback`);
   }
