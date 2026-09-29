@@ -14,12 +14,14 @@ import Routers from './routes'
 import WindowFocusHandler from './utils/check-browser-active'
 import 'react-toastify/dist/ReactToastify.css'
 import { DrawerProvider } from './context/DrawerContext.js'
+import { useNavigateCustom } from './pages/_layout/elements/custom-link.js'
 
 const App = () => {
   const ref = React.useRef<any>(null)
   const dispatch = useAppDispatch()
 
   const { socketUser } = useWebsocketUser()
+    const navigate = useNavigateCustom();
 
   const userState = useAppSelector<{ user: User }>(selectUserData)
   const loadingState = useAppSelector(selectLoader)
@@ -71,8 +73,9 @@ const App = () => {
       dispatch(userUpdate({} as User))
       setTimeout(() => {
         dispatch(logout())
-        localStorage.removeItem('login-session')
+        // localStorage.removeItem('login-session')
         // window.location.reload()
+         navigate.go("/login");
       }, 1)
     })
   }, [])
