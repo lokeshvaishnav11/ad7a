@@ -14,7 +14,7 @@ import Routers from './routes'
 import WindowFocusHandler from './utils/check-browser-active'
 import 'react-toastify/dist/ReactToastify.css'
 import { DrawerProvider } from './context/DrawerContext.js'
-import { useNavigateCustom } from './pages/_layout/elements/custom-link.js'
+import { useNavigateCustom } from './pages/_layout/elements/custom-link'
 
 const App = () => {
   const ref = React.useRef<any>(null)
