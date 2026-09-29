@@ -21,7 +21,6 @@ const App = () => {
   const dispatch = useAppDispatch()
 
   const { socketUser } = useWebsocketUser()
-    const navigate = useNavigateCustom();
 
   const userState = useAppSelector<{ user: User }>(selectUserData)
   const loadingState = useAppSelector(selectLoader)
