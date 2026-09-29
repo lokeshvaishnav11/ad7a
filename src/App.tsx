@@ -71,12 +71,10 @@ const App = () => {
       const localSessionId = localStorage.getItem('login-session')
       if (localSessionId == sessionId) return
       dispatch(userUpdate({} as User))
-      setTimeout(() => {
-        dispatch(logout())
-        // localStorage.removeItem('login-session')
-        // window.location.reload()
-         navigate.go("/login");
-      }, 1)
+    setTimeout(() => {
+  dispatch(logout())
+  window.location.href = "/login";
+}, 1)
     })
   }, [])
 
